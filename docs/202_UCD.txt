@@ -1,0 +1,97 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+title Gmail連携メール一斉送信システム ユースケース図
+
+actor "一般ユーザー" as User
+actor "承認者" as Approver
+actor "管理者" as Admin
+actor "Google OAuth Server" as Google
+actor "Gmail API" as Gmail
+actor "Scheduler" as Scheduler
+actor "Java Mail Engine" as Engine
+actor "監視システム" as Monitor
+
+rectangle "Gmail Bulk Email Sending System" {
+
+  usecase "UC-01\nユーザー登録" as UC01
+  usecase "UC-02\nログイン" as UC02
+  usecase "UC-03\nGmailアカウント連携" as UC03
+  usecase "UC-04\n宛先CSV登録" as UC04
+  usecase "UC-05\n宛先手動登録" as UC05
+  usecase "UC-06\nテンプレート作成" as UC06
+  usecase "UC-07\n一斉送信実行" as UC07
+  usecase "UC-08\n予約送信" as UC08
+  usecase "UC-09\n送信履歴確認" as UC09
+  usecase "UC-10\nGmail受信確認" as UC10
+  usecase "UC-11\n配信停止処理" as UC11
+  usecase "UC-12\n添付ファイル送信" as UC12
+  usecase "UC-13\nユーザー停止" as UC13
+  usecase "UC-14\n送信上限設定" as UC14
+  usecase "UC-15\nエラー再送" as UC15
+  usecase "UC-16\nテスト送信" as UC16
+  usecase "UC-17\n送信承認依頼" as UC17
+  usecase "UC-18\n送信緊急停止" as UC18
+  usecase "UC-19\n送信前チェック" as UC19
+  usecase "UC-20\nExcel貼り付け宛先登録" as UC20
+  usecase "UC-21\n自動下書き保存" as UC21
+  usecase "UC-22\nテンプレ検索" as UC22
+  usecase "UC-23\n重複送信防止" as UC23
+  usecase "UC-24\nトークン再認証" as UC24
+  usecase "UC-25\n監査ログ閲覧" as UC25
+  usecase "UC-26\n障害通知確認" as UC26
+  usecase "UC-27\n権限変更" as UC27
+}
+
+User --> UC01
+User --> UC02
+User --> UC03
+User --> UC04
+User --> UC05
+User --> UC06
+User --> UC07
+User --> UC08
+User --> UC09
+User --> UC10
+User --> UC16
+User --> UC20
+User --> UC21
+User --> UC22
+User --> UC24
+
+Approver --> UC17
+Approver --> UC18
+
+Admin --> UC13
+Admin --> UC14
+Admin --> UC18
+Admin --> UC25
+Admin --> UC26
+Admin --> UC27
+
+Google --> UC03
+Google --> UC24
+
+Gmail --> UC07
+Gmail --> UC10
+Gmail --> UC16
+
+Scheduler --> UC08
+Engine --> UC07
+
+Monitor --> UC26
+
+UC07 .> UC19 : <<include>>
+UC07 .> UC23 : <<include>>
+UC07 .> UC12 : <<extend>>
+UC07 .> UC15 : <<extend>>
+UC07 .> UC16 : <<extend>>
+UC07 .> UC17 : <<extend>>
+UC07 .> UC18 : <<extend>>
+
+UC08 .> UC07 : <<include>>
+UC03 .> UC24 : <<extend>>
+
+@enduml
